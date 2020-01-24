@@ -5,6 +5,10 @@ namespace App\Controller\Api;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Entity\Editor;
+
+
+
 class EditorController extends AbstractController
 {
     /**
@@ -12,9 +16,10 @@ class EditorController extends AbstractController
      */
     public function index()
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/EditorController.php',
-        ]);
+        $editors = $this->getDoctrine()
+        ->getRepository(Editor::class)
+        ->findAll();
+
+        return $this->json($editors);
     }
 }

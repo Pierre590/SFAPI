@@ -26,6 +26,7 @@ class Editor
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="editor")
      */
+
     private $games;
 
     public function __construct()
@@ -80,4 +81,5 @@ class Editor
 
         return $this;
     }
+
 }
