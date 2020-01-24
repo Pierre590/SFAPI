@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use App\Entity\Editor;
 
@@ -20,6 +21,50 @@ class EditorController extends AbstractController
         ->getRepository(Editor::class)
         ->findAll();
 
-        return $this->json($editors);
+        $response = [];
+
+        foreach ($editors as $editor) {
+            $response [] = [
+                'id' => $editor->getId(),
+                'name' => $editor->getName(),
+            ];
+        }
+
+        return $this->json($response);
     }
+
+    /**
+     * @Route("/editor/{id}",
+     *name="editor_detail",
+     *requirements={"id"="\d+"})
+     */
+
+    public function editor($id)
+    {
+        $editor = $this->getDoctrine()
+        ->getRepository(Editor::class)
+        ->find($id);
+
+        if(!$editor){
+            throw $this->createNotFoundException('L\'editeur n\'existe pas');
+        }
+
+        $games = [];
+
+        foreach ($editor->getGames()as $game) {
+            $games [] = [
+                'id' => $game->getId(),
+                'name' => $game->getName(),
+            ];
+        }
+
+        $response = [
+            'id' => $editor->getId(),
+            'name' => $editor->getName(),
+            'games'=> $games,
+        ];
+
+        return $this->json($response);
+    }
+
 }

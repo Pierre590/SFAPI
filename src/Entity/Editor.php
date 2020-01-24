@@ -41,7 +41,7 @@ class Editor
 
     public function getName(): ?string
     {
-        return $this->name;
+        return preg_replace('/\s+/', ' ', str_replace("\n", '', $this->name));
     }
 
     public function setName(string $name): self
